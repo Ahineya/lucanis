@@ -1,9 +1,5 @@
-use llama_cpp::{*};
-use llama_cpp::standard_sampler::StandardSampler;
 use tauri::Manager;
 use tauri::path::BaseDirectory;
-use callm::pipelines::PipelineText;
-use kalosm::{*, language::*};
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -23,16 +19,17 @@ pub fn run() {
 
 #[tauri::command]
 async fn my_custom_command(handle: tauri::AppHandle) -> String {
-    // Call another async function and wait for it to finish
-    some_async_function().await;
-
-    let mut llm = Llama::new().await.unwrap();
-    let prompt = "The following is a 300 word essay about Paris:";
-    print!("{}", prompt);
-
-    let text_completion = llm.generate_text(prompt).await.expect("Failed to generate text");
-
-    text_completion
+    // // Call another async function and wait for it to finish
+    // some_async_function().await;
+    //
+    // let mut llm = Llama::new().await.unwrap();
+    // let prompt = "The following is a 300 word essay about Paris:";
+    // print!("{}", prompt);
+    //
+    // let text_completion = llm.generate_text(prompt).await.expect("Failed to generate text");
+    //
+    // text_completion
+    "Hello from my_custom_command".to_string()
 }
 
 async fn some_async_function() {

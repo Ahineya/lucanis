@@ -31,7 +31,7 @@ export const ActionWindow = () => {
 
         const currentDialogue = mbCurrentDialogue.unwrap();
 
-        return conversationTopics.filter(topic => dialogueService.getDialogueLine({npc: currentDialogue.subject, topic}).isSome());
+        return conversationTopics.filter(topic => dialogueService.knowsTopic(currentDialogue.subject, topic));
     }, [conversationTopics, mbCurrentDialogue]);
 
     const exitToWorldMap = () => {
