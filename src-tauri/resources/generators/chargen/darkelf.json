@@ -1,0 +1,33 @@
+{
+  "name": "darkelf",
+  "baseAttributes": {
+    "strength": 10,
+    "dexterity": 20,
+    "constitution": 10,
+    "intelligence": 20,
+    "wisdom": 20,
+    "charisma": 10,
+    "luck": 10
+  },
+  "baseSkills": {
+    "acrobatics": 0,
+    "alchemy": 0,
+    "arcana": 0,
+    "athletics": 0,
+    "deception": 0,
+    "history": 0,
+    "insight": 0,
+    "intimidation": 0,
+    "investigation": 0,
+    "lockpicking": 0,
+    "medicine": 0,
+    "nature": 0,
+    "perception": 0,
+    "persuasion": 0,
+    "religion": 0,
+    "sleightOfHand": 0,
+    "stealth": 10,
+    "survival": 0,
+    "thievery": 0
+  }
+}
