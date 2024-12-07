@@ -1,0 +1,125 @@
+{
+  "_greeting0": [
+    {
+      "text": "Hello, meat!",
+      "conditions": [
+        {
+          "cType": "race",
+          "cValue": "halfdemon"
+        }
+      ]
+    },
+    {
+      "text": "Hello, stranger!",
+      "conditions": []
+    }
+  ],
+  "Lucanis": [
+    {
+      "text": "Lucanis provides.",
+      "conditions": [
+        {
+          "cType": "race",
+          "cValue": "human"
+        }
+      ]
+    },
+    {
+      "text": "Mmm? Lucanis? It is how our continent is called.",
+      "conditions": []
+    }
+  ],
+  "continent": [
+    {
+      "text": "Lucanis is a continent.",
+      "conditions": []
+    }
+  ],
+  "Lucanis provides": [
+    {
+      "text": "We believe that Lucanis provides us with our life force.",
+      "conditions": [
+        {
+          "cType": "race",
+          "cValue": "human"
+        }
+      ]
+    }
+  ],
+  "life force": [
+    {
+      "text": "Life force? What you need to know about it, is that there is a Source of it. And it is not what you think.",
+      "conditions": [
+        {
+          "cType": "npc",
+          "cValue": "$NPC_ELDER"
+        },
+        {
+          "cType": "dsl",
+          "cValue": "quest_id get_journal_stage 15 <"
+        }
+      ],
+      "effect": {
+        "effect": "quest_id 20 set_journal_stage"
+      }
+    },
+    {
+      "text": "Life force? I told you everything I know.",
+      "conditions": [
+        {
+          "cType": "npc",
+          "cValue": "$NPC_ELDER"
+        },
+        {
+          "cType": "dsl",
+          "cValue": "quest_id get_journal_stage 15 >"
+        }
+      ],
+      "effect": {
+        "effect": "quest_id 20 set_journal_stage"
+      }
+    },
+    {
+      "text": "Life force is the energy that keeps us alive. You want to know more? Ask $NPC_ELDER",
+      "conditions": [
+        {
+          "cType": "race",
+          "cValue": "human"
+        },
+        {
+          "cType": "dsl",
+          "cValue": "$NPC_ELDER id get_npc !="
+        }
+      ],
+      "effect": {
+        "effect": "quest_id 10 set_journal_stage"
+      }
+    }
+  ],
+  "friend": [
+    {
+      "text": "Friend? Do I look like a friend to you?",
+      "conditions": [
+        {
+          "cType": "race",
+          "cValue": "halfdemon"
+        }
+      ]
+    },
+    {
+      "text": "Sure, we can be friends.",
+      "conditions": []
+    }
+  ],
+  "$NPC_ELDER": [
+    {
+      "text": "$NPC_ELDER? Oh, $HE_NPC_ELDER lives in $LOC_NPC_ELDER, you may find $HIM_NPC_ELDER in $POINT_NPC_ELDER",
+      "conditions": [
+        {
+          "cType": "dsl",
+          "cValue": "quest_id get_journal_stage 10 = $NPC_ELDER id get_npc != and"
+        }
+      ]
+    }
+  ]
+}
