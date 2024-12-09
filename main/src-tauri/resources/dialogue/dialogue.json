@@ -56,7 +56,7 @@
         },
         {
           "cType": "dsl",
-          "cValue": "quest_id get_journal_stage 15 <"
+          "cValue": "quest_id get_journal_stage 19 <"
         }
       ],
       "effect": {
@@ -72,7 +72,7 @@
         },
         {
           "cType": "dsl",
-          "cValue": "quest_id get_journal_stage 15 >"
+          "cValue": "quest_id get_journal_stage 19 >"
         }
       ],
       "effect": {
@@ -119,7 +119,10 @@
           "cType": "dsl",
           "cValue": "quest_id get_journal_stage 10 = $NPC_ELDER id get_npc != and"
         }
-      ]
+      ],
+      "effect": {
+          "effect": "quest_id 15 set_journal_stage"
+      }
     }
   ]
 }

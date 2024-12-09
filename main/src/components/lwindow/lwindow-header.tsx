@@ -50,6 +50,10 @@ export const LWindowHeader: FC<Props> = ({win: {id, x, y, width, height, title}}
             onMouseDown={startDrag}
         >
             {title}
+            <button className="absolute right-2" onMouseDown={(e) => {
+                e.stopPropagation();
+                windowsStore.closeWindow(id);
+            }}>X</button>
         </div>
     )
 }

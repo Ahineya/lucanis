@@ -1,4 +1,4 @@
-import {JournalRecord, journalStore} from "../stores/journal.store.ts";
+import {JournalState, journalStore} from "../stores/journal.store.ts";
 import {combine, List, match} from "../lib/option.lib.ts";
 import {Character} from "./chargen.service.ts";
 
@@ -29,7 +29,7 @@ class EffectService {
 
                     combine([id, stage]).fold(([id, stage]) => {
                         if (!journalStore.hasRecordStage(id as string, stage as number)) {
-                            journalStore.addRecord({id, stage} as JournalRecord);
+                            journalStore.addRecord({id, stage} as JournalState);
                         }
                     }, () => {
                         throw new Error("Not enough arguments for set_journal_stage");
@@ -111,6 +111,16 @@ class EffectService {
                         throw new Error("Not enough arguments for <");
                     });
                 },
+                "<=": () => {
+                    const a = stack.pop();
+                    const b = stack.pop();
+
+                    combine([a, b]).fold(([a, b]) => {
+                        stack.push(b <= a);
+                    }, () => {
+                        throw new Error("Not enough arguments for <=");
+                    });
+                },
                 ">": () => {
                     const a = stack.pop();
                     const b = stack.pop();
@@ -119,6 +129,16 @@ class EffectService {
                         stack.push(b > a);
                     }, () => {
                         throw new Error("Not enough arguments for >");
+                    });
+                },
+                ">=": () => {
+                    const a = stack.pop();
+                    const b = stack.pop();
+
+                    combine([a, b]).fold(([a, b]) => {
+                        stack.push(b >= a);
+                    }, () => {
+                        throw new Error("Not enough arguments for >=");
                     });
                 },
                 "!=": () => {
@@ -170,7 +190,7 @@ class EffectService {
                 },
             });
 
-            console.log(JSON.stringify(stack, null, 2));
+            // console.log(JSON.stringify(stack, null, 2));
         }
 
         return stack.pop();

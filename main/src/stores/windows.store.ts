@@ -8,6 +8,11 @@ export type TWindow = {
     width: number;
     height: number;
     title: string;
+    hidden?: boolean;
+}
+
+function capitalize(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 class WindowsStore {
@@ -124,6 +129,57 @@ class WindowsStore {
         }));
 
         this.storeWindowData();
+    }
+
+    public closeWindow(id: string) {
+        this.windows.next(this.windows.getValue().map(window => {
+            if (window.id === id) {
+                return {
+                    ...window,
+                    hidden: true,
+                }
+            }
+            return window;
+        }));
+
+        this.storeWindowData();
+    }
+
+    public openWindow(id: string) {
+        this.windows.next(this.windows.getValue().map(window => {
+            if (window.id === id) {
+                return {
+                    ...window,
+                    hidden: false,
+                }
+            }
+            return window;
+        }));
+
+        this.selectWindow(id);
+
+        this.storeWindowData();
+    }
+
+    public toggleWindow(id: string) {
+        const window = this.windows.getValue().find(window => window.id === id);
+        if (!window) {
+            this.addWindow({
+                id,
+                x: 50,
+                y: 50,
+                width: 400,
+                height: 200,
+                title: capitalize(id),
+            });
+            return;
+        }
+
+        if (window.hidden) {
+            this.openWindow(id);
+        } else {
+            this.closeWindow(id);
+        }
     }
 
     private async storeWindowData() {

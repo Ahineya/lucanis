@@ -9,6 +9,7 @@ import {loadStore} from "../stores/load.store.ts";
 import {findBridgesAndArticulationPoints, findEdgeCutsOfSizeTwo} from "../lib/graph/graph.ts";
 import {dialogueService} from "./dialogue.service.ts";
 import {dialogueStore} from "../stores/dialogue.store.ts";
+import {journalService} from "./journal.service.ts";
 
 export type GameMapLayout = {
     points: Point[] // Point is export type Point = { x: number; y: number };
@@ -87,13 +88,18 @@ class WorldgenService {
             const map = await this.generateMap(names, pointNames, characterNames);
             maps.push(map);
 
+            overworld.pointsData[i].name = map.name;
+
             console.log(`Generated map ${i + 1}/${TOTAL_MAPS}`, map);
             loadStore.pushLoadState(`Generated map ${i + 1}/${TOTAL_MAPS}`);
         }
 
         const charCount = maps.reduce((acc, map) => acc + map.characters.length, 0);
 
-        dialogueService.resolveNpcs(maps);
+        loadStore.pushLoadState('Resolving NPCs in dialogues...');
+        const npcMap = dialogueService.resolveNpcs(maps);
+        loadStore.pushLoadState('Resolving NPCs in journal records...');
+        journalService.resolveNpcs(maps, npcMap);
         dialogueStore.fillTopics();
 
         console.log('World generated!');

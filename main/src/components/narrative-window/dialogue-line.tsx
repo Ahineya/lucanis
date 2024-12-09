@@ -3,6 +3,7 @@ import {AhoCorasickMatch, stringSearch} from "../../lib/string-search/string-sea
 import {FC, useMemo} from "react";
 import {Character} from "../../services/chargen.service.ts";
 import {option} from "../../lib/option.lib.ts";
+import {dialogueService} from "../../services/dialogue.service.ts";
 
 function isWordBoundary(char: string | undefined): boolean {
     if (char === undefined) return true;
@@ -19,7 +20,7 @@ function filterFullWordMatches(s: string, matches: AhoCorasickMatch[]): AhoCoras
 
 function splitStringWithMatches(
     s: string,
-    matches: AhoCorasickMatch[]
+    matches: AhoCorasickMatch[],
 ): { text: string; match?: AhoCorasickMatch }[] {
     const result: { text: string; match?: AhoCorasickMatch }[] = [];
     let currentPosition = 0;
@@ -89,7 +90,8 @@ export const DialogueLine: FC<Props> = ({line, subject, isCurrentDialogue}) => {
             return [{text: line.text}] as { text: string; match?: AhoCorasickMatch }[];
         }
 
-        const s = stringSearch.search(line.text);
+        const s = stringSearch.search(line.text)
+            .filter(match => dialogueService.knowsTopic(subject, match.topic));
         return splitStringWithMatches(line.text, s);
     }, [line, isCurrentDialogue]);
 

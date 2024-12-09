@@ -6,14 +6,18 @@ import {MapWindow} from "./map-window/map-window.tsx";
 import {LocationWindow} from "./location-window/location-window.tsx";
 import {ActionWindow} from "./action-window/action-window.tsx";
 import {NarrativeWindow} from "./narrative-window/narrative-window.tsx";
+import {MainMenuBar} from "./main-menu-bar.tsx";
+import {JournalWindow} from "./journal-window/journal-window.tsx";
 
 export const WindowManager = () => {
     const windows = useStoreSubscribe(windowsStore.windows);
-    const activeWindow = useStoreSubscribe(windowsStore.activeWindow);
+    // const activeWindow = useStoreSubscribe(windowsStore.activeWindow);
     const windowOrder = useStoreSubscribe(windowsStore.windowOrder);
 
     const orderedWindows = useMemo(() => {
-        return windowOrder.map(windowId => windows.find(window => window.id === windowId));
+        return windowOrder
+            .map(windowId => windows.find(window => window.id === windowId))
+            .filter(window => !window.hidden);
     }, [windowOrder, windows]);
 
     return (
@@ -40,10 +44,16 @@ export const WindowManager = () => {
                                     <NarrativeWindow/>
                                 )
                             }
+                            {
+                                window.id === "journal" && (
+                                    <JournalWindow/>
+                                )
+                            }
                         </LWindow>
                     )
                 })
             }
+            <MainMenuBar/>
         </div>
     )
 }

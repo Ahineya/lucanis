@@ -1,0 +1,28 @@
+{
+  "quest_id": {
+    "title": "Test Quest",
+    "entries": [
+      {
+        "id": "quest_id",
+        "text": "Humans spoke about the life force. I should ask the Elder about it if I want to know more.",
+        "value": 10,
+        "conditions": [
+        ]
+      },
+      {
+        "id": "quest_id",
+        "text": "$NPC_ELDER lives in $LOC_NPC_ELDER, at $POINT_NPC_ELDER",
+        "value": 15,
+        "conditions": [
+        ]
+      },
+      {
+        "id": "quest_id",
+        "text": "The Elder told me about the Source of the life force. I want to figure out what it is.",
+        "value": 20,
+        "conditions": [
+        ]
+      }
+    ]
+  }
+}

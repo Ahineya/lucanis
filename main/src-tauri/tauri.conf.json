@@ -32,7 +32,8 @@
     "resources": {
       "resources/generators/chargen/**/*": "generators/chargen",
       "resources/generators/**/*": "generators",
-      "resources/dialogue/dialogue.json": "dialogue/dialogue.json"
+      "resources/dialogue/dialogue.json": "dialogue/dialogue.json",
+      "resources/journal/journal.json": "journal/journal.json"
     }
   }
 }

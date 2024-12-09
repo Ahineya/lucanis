@@ -32,6 +32,62 @@ type DialogueLine = {
     effect?: EffectDSL;
 }
 
+export function replaceVariablesInText(line: {text: string}, npcMap: Map<string, {
+    npc: Character;
+    mapIndex: number;
+    pointIndex: number
+}>, maps: GameMap[]) {
+    const regex = /\$NPC_[a-zA-Z0-9_]+/g;
+    line.text = line.text.replace(regex, (match: string) => {
+        return npcMap.get(match)?.npc.name ?? match;
+    });
+
+    const regex21 = /\$HE_NPC_[a-zA-Z0-9_]+/g;
+    line.text = line.text.replace(regex21, (match: string) => {
+        // console.log(`Matched ${match}`);
+        // console.log(npcMap);
+
+        const npcRef = match.replace("HE_", "");
+
+        const npc = option(npcMap.get(npcRef)?.npc); // unsafe
+        return npc.map(n => n.gender === "male" ? "he" : "she").unwrapOr("they");
+    });
+
+    const regex22 = /\$HIM_NPC_[a-zA-Z0-9_]+/g;
+    line.text = line.text.replace(regex22, (match: string) => {
+        // console.log(`Matched ${match}`);
+        // console.log(npcMap);
+
+        const npcRef = match.replace("HIM_", "");
+
+        const npc = option(npcMap.get(npcRef)?.npc); // unsafe
+        return npc.map(n => n.gender === "male" ? "him" : "her").unwrapOr("them");
+    });
+
+    const regex3 = /\$LOC_NPC_[a-zA-Z0-9_]+/g;
+    line.text = line.text.replace(regex3, (match: string) => {
+        console.log(`Matched ${match}`);
+        console.log(npcMap);
+
+        const npcRef = match.replace("LOC_", "");
+
+        const mapIndex = option(npcMap.get(npcRef)?.mapIndex); // unsafe
+        return mapIndex.map(n => maps[n].name).unwrapOr("somewhere");
+    });
+
+    const regex4 = /\$POINT_NPC_[a-zA-Z0-9_]+/g;
+    line.text = line.text.replace(regex4, (match: string) => {
+        // console.log(`Matched ${match}`);
+        // console.log(npcMap);
+
+        const npcRef = match.replace("POINT_", "");
+
+        const mapIndex = option(npcMap.get(npcRef)?.mapIndex); // unsafe
+        const pointIndex = option(npcMap.get(npcRef)?.pointIndex); // unsafe
+        return combine([mapIndex, pointIndex]).map(([mi, pi]) => maps[mi].pointsData[pi].name).unwrapOr("somewhere");
+    });
+}
+
 // Morrowind-like dialogue system
 class DialogueService {
     dialogueCache = new Map<string, DialogueLine[]>();
@@ -131,55 +187,7 @@ class DialogueService {
                     }
                 }
 
-                const regex = /\$NPC_[a-zA-Z0-9_]+/g;
-                line.text = line.text.replace(regex, (match: string) => {
-                    return npcMap.get(match)?.npc.name ?? match;
-                });
-
-                const regex21 = /\$HE_NPC_[a-zA-Z0-9_]+/g;
-                line.text = line.text.replace(regex21, (match: string) => {
-                    console.log(`Matched ${match}`);
-                    console.log(npcMap);
-
-                    const npcRef = match.replace("HE_", "");
-
-                    const npc = option(npcMap.get(npcRef)?.npc); // unsafe
-                    return npc.map(n => n.gender === "male" ? "he" : "she").unwrapOr("they");
-                });
-
-                const regex22 = /\$HIM_NPC_[a-zA-Z0-9_]+/g;
-                line.text = line.text.replace(regex22, (match: string) => {
-                    console.log(`Matched ${match}`);
-                    console.log(npcMap);
-
-                    const npcRef = match.replace("HIM_", "");
-
-                    const npc = option(npcMap.get(npcRef)?.npc); // unsafe
-                    return npc.map(n => n.gender === "male" ? "him" : "her").unwrapOr("them");
-                });
-
-                const regex3 = /\$LOC_NPC_[a-zA-Z0-9_]+/g;
-                line.text = line.text.replace(regex3, (match: string) => {
-                    console.log(`Matched ${match}`);
-                    console.log(npcMap);
-
-                    const npcRef = match.replace("LOC_", "");
-
-                    const mapIndex = option(npcMap.get(npcRef)?.mapIndex); // unsafe
-                    return mapIndex.map(n => maps[n].name).unwrapOr("somewhere");
-                });
-
-                const regex4 = /\$POINT_NPC_[a-zA-Z0-9_]+/g;
-                line.text = line.text.replace(regex4, (match: string) => {
-                    console.log(`Matched ${match}`);
-                    console.log(npcMap);
-
-                    const npcRef = match.replace("POINT_", "");
-
-                    const mapIndex = option(npcMap.get(npcRef)?.mapIndex); // unsafe
-                    const pointIndex = option(npcMap.get(npcRef)?.pointIndex); // unsafe
-                    return combine([mapIndex, pointIndex]).map(([mi, pi]) => maps[mi].pointsData[pi].name).unwrapOr("somewhere");
-                });
+                replaceVariablesInText(line, npcMap, maps);
 
                 console.log(`Replaced npc references in ${line.text}`);
             }
@@ -194,6 +202,8 @@ class DialogueService {
                 this.dialogueCache.set(name, dialogueLines);
             }
         }
+
+        return npcMap;
     }
 
     getTopicsAhoCorasick() {
